@@ -235,9 +235,7 @@ After :
 3. Resize to input size ( 31x31 , size of images in dataset)
 4. Normilize
 
-As can bee seen from provided table model complete sure on signs that have a good representation on train/validate dataset
-
-Model evalution on this 'dataset' give a 100% accuracy:
+Model evalution give a 100% accuracy:
 
 | Sign name |            Confidence | Predicted class id | actual class id | Image |
 |:--------------------:|:----------:|:------------------:|:----------:|-----------|
