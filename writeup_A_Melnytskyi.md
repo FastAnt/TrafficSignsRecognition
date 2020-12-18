@@ -140,9 +140,19 @@ But this dataset will be used just for test knowledge in creation of NN architec
    
    <img src="./assets/ganeral_data_view.png">
    
-   #### 5.3 Need to normilize data 
-   
+   #### 5.3 Need to normilize data
+
+Normalization refers to normalizing the data dimensions so that they are of approximately the same scale. There are two common ways of achieving this normalization. One is to divide each dimension by its standard deviation, once it has been zero-centered: (X /= np.std(X, axis = 0)). Another form of this preprocessing normalizes each dimension so that the min and max along the dimension is -1 and 1 respectively. It only makes sense to apply this preprocessing if you have a reason to believe that different input features have different scales (or units), but they should be of approximately equal importance to the learning algorithm. In case of images, the relative scales of pixels are already approximately equal (and in range from 0 to 255), so it is not strictly necessary to perform this additional preprocessing step.
+
+<b>In this case I centrate and divide. (im -128) / 128</b>
+
    <img src="./assets/normilize.png">
+
+   #### 5.4 Normalization weights on initialization.
+
+        More deteil https://arxiv.org/pdf/1602.07868.pdf
+
+
 <!-- #endregion -->
 
 ## Design and Test a Model Architecture
@@ -194,6 +204,21 @@ My choise in this case (data - architecture), is Adam with next params
 |beta_2| 0.9|
 |epsilon|1e-07|
 
+As train strategy params, from tensorboard toy can see that <B>80</B> epochs are enough
+
+| param | value |
+|-------|-------|
+|epochs| 80 |
+| batch size | 64 |
+
+
+<b>Also you can pass early stopping callback to your fit tf.keras.callbacks.EarlyStopping</b>
+
+tf.keras.callbacks.EarlyStopping(
+    monitor='val_loss', min_delta=0, patience=0, verbose=0,
+    mode='auto', baseline=None, restore_best_weights=False
+)
+
 As loss I use <b>BinaryCrossentropy</b> 
 
 
@@ -203,16 +228,17 @@ As loss I use <b>BinaryCrossentropy</b>
 
 As result :
 
+
+
+<b>ACC on test data
+395/395 [==============================] - 1s 3ms/step - loss: 0.0118 - accuracy: 0.9654
+</b>
+
 | Data                     | acc value|
 |--------------------------|-------|
 | Best Validation accuracy | 0.983 |
 | Test accuracy | 0.965 |
 | Best Train accuracy | 0.992 |
-
-
-395/395 [==============================] - 1s 3ms/step - loss: 0.0118 - accuracy: 0.9654
-
-
 
 <!-- #endregion -->
 
@@ -235,8 +261,6 @@ After :
 3. Resize to input size ( 31x31 , size of images in dataset)
 4. Normilize
 
-Model evalution give a 100% accuracy:
-
 | Sign name |            Confidence | Predicted class id | actual class id | Image |
 |:--------------------:|:----------:|:------------------:|:----------:|-----------|
 | Speed limit (30km/h)' | 100.00     | 1                  | 1 | <img src="./assets/1_1.png">|
@@ -247,6 +271,10 @@ Model evalution give a 100% accuracy:
 | raffic signals | 46.00 |  26 | 26 | <img src="./assets/6_6.png"> |
 | No entry|  100.00 | 17 | 17 | <img src="./assets/7_7.png"> |
 
+
+###### Model evalution give a 100% accuracy, but if we compare with test dataset evaluation we can see some gap.Problem is that according to inbalanced dataset some of road signs classes are not good recognized , e.g <b>Ban on cycling</b>
+
+###### Also some signs have importent informations that can be losed in some value by low resolution.
 
 
 
